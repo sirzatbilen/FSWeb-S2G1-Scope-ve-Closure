@@ -64,8 +64,10 @@ Aşağıdaki takimSkoru() fonksiyonununda aşağıdakileri yapınız:
 Not: Bu fonskiyon, aşağıdaki diğer görevler için de bir callback fonksiyonu olarak da kullanılacak
 */
 
-function takimSkoru(/*Kodunuzu buraya yazınız*/){
-    /*Kodunuzu buraya yazınız*/
+function takimSkoru(){
+let skor = Math.floor(Math.random()*(25-10+1)+10)
+return skor
+
 }
 
 
@@ -86,8 +88,25 @@ Aşağıdaki macSonucu() fonksiyonununda aşağıdakileri yapınız:
 }
 */ 
 
-function macSonucu(/*Kodunuzu buraya yazınız*/){
-  /*Kodunuzu buraya yazınız*/
+function macSonucu(callbackFunction,ceyrekSayisi){
+  let evSahibi = 0;
+  let konukTakim = 0;
+
+  for(let ceyrek=1; ceyrek <= ceyrekSayisi; ceyrek++){
+    evSahibi += callbackFunction();
+    konukTakim += callbackFunction();
+  }
+
+  let finalSkor ={};
+  finalSkor.EvSahibi= evSahibi;
+  finalSkor.KonukTakim= konukTakim;
+
+  let skor = {
+    EvSahibi: evSahibi,
+    KonukTakim: konukTakim
+  }
+
+  return finalSkor;
 }
 
 
@@ -109,10 +128,15 @@ Aşağıdaki periyotSkoru() fonksiyonununda aşağıdakileri yapınız:
   */
 
 
-function periyotSkoru(/*Kodunuzu buraya yazınız*/) {
-  /*Kodunuzu buraya yazınız*/
+function periyotSkoru(callbackFunction) {
+ let score ={};
+ 
+ score.EvSahibi = callbackFunction();
+ score["KonukTakim"] = callbackFunction();
 
+ return score;
 }
+console.log(periyotSkoru(takimSkoru));
 
 
 /* Zorlayıcı Görev 5: skorTabelasi() 
@@ -146,10 +170,33 @@ MAÇ UZAR ise skorTabelasi(periyotSkoru,takimSkoru,4)
 ] */
 // NOTE: Bununla ilgili bir test yoktur. Eğer logladığınız sonuçlar yukarıdakine benziyor ise tmamlandı sayabilirsiniz.
 
-function skorTabelasi(/*Kodunuzu buraya yazınız*/) {
-  /*Kodunuzu buraya yazınız*/
-}
+function skorTabelasi(periyotSkoru,takimSkoru,ceyrekSayısı) {
+  let EvSahibi = 0;
+  let KonukTakim= 0; 
+   let skorlar=[];
+  for(let i =1; i <= ceyrekSayısı; i++){
+    let periyot = periyotSkoru(takimSkoru);
+    EvSahibi += periyot.EvSahibi;
+    KonukTakim += periyot.KonukTakim;
+    let periyotSonucu = i +". Periyot: Ev Sahibi " + periyot.EvSahibi + " - Konuk Takım "+ periyot.KonukTakim;
+    skorlar.push(periyotSonucu);
+  }
+  let i=1;
+  while (EvSahibi===KonukTakim){
+    let EvSahibiUzatmaSkoru=takimSkoru();
+    let KonukTakimUzatmaSkoru=takimSkoru();
+    EvSahibi += EvSahibiUzatmaSkoru;
+    KonukTakim += KonukTakimUzatmaSkoru;
+    let uzatmaMetni =i+  ". Uzatma: Ev Sahibi "+EvSahibiUzatmaSkoru+ "- Konuk Takım "+KonukTakimUzatmaSkoru;
+    skorlar.push(uzatmaMetni);
+    i++;
 
+  }
+  const macSonucu = `Maç Sonucu: Ev Sahibi ${EvSahibi} - Konuk Takım ${KonukTakim}`;
+  skorlar.push(macSonucu);
+  return skorlar;
+}
+console.log(skorTabelasi(periyotSkoru,takimSkoru,4));
 
 
 
